@@ -194,6 +194,62 @@ async function embedGoogleFontsInline() {
   return _embedFontsPromise;
 }
 
+// ===== Render & nén dưới 2MB =====
+const MAX_BYTES = 2 * 1024 * 1024;
+
+function fmtSize(bytes) {
+  return (bytes / 1024 / 1024).toFixed(2) + 'MB';
+}
+
+function downscaleCanvas(srcCanvas, ratio) {
+  const out = document.createElement('canvas');
+  out.width = Math.max(1, Math.round(srcCanvas.width * ratio));
+  out.height = Math.max(1, Math.round(srcCanvas.height * ratio));
+  const ctx = out.getContext('2d');
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(srcCanvas, 0, 0, out.width, out.height);
+  return out;
+}
+
+function canvasToBlob(canvas, type, quality) {
+  return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
+}
+
+async function renderUnderSize(node, maxBytes) {
+  // Render 1 lần ở scale 2 với alpha — sau đó nén tại canvas (nhanh, không re-render DOM)
+  const canvas = await window.modernScreenshot.domToCanvas(node, {
+    scale: 2,
+    backgroundColor: null,
+  });
+
+  // 1) PNG lossless, hạ scale dần dần để vừa 2MB (giữ alpha → bo góc nguyên vẹn)
+  for (const ratio of [1, 0.85, 0.75, 0.6, 0.5]) {
+    const c = ratio === 1 ? canvas : downscaleCanvas(canvas, ratio);
+    const blob = await canvasToBlob(c, 'image/png');
+    console.log(`[export] PNG x${(ratio*2).toFixed(2)} ${c.width}×${c.height} = ${fmtSize(blob.size)}`);
+    if (blob.size <= maxBytes) return { blob, ext: 'png' };
+  }
+
+  // 2) Fallback JPEG ở scale 2 — fill bg để 4 góc bo không bị màu lạ
+  const bg = getComputedStyle(node).backgroundColor || '#ffd9e6';
+  const filled = document.createElement('canvas');
+  filled.width = canvas.width;
+  filled.height = canvas.height;
+  const fctx = filled.getContext('2d');
+  fctx.fillStyle = bg;
+  fctx.fillRect(0, 0, filled.width, filled.height);
+  fctx.drawImage(canvas, 0, 0);
+
+  let blob;
+  for (const q of [0.95, 0.92, 0.88, 0.85, 0.8, 0.75]) {
+    blob = await canvasToBlob(filled, 'image/jpeg', q);
+    console.log(`[export] JPEG q=${q} = ${fmtSize(blob.size)}`);
+    if (blob.size <= maxBytes) return { blob, ext: 'jpg' };
+  }
+  return { blob, ext: 'jpg' };
+}
+
 $('downloadBtn').addEventListener('click', async () => {
   const btn = $('downloadBtn');
   const original = btn.textContent;
@@ -222,14 +278,9 @@ $('downloadBtn').addEventListener('click', async () => {
     node.style.transform = 'none';
     node.style.position = 'static';
 
-    let blob;
+    let blob, ext;
     try {
-      blob = await window.modernScreenshot.domToBlob(node, {
-        scale: 2,
-        type: 'image/png',
-        quality: 1,
-        backgroundColor: null,
-      });
+      ({ blob, ext } = await renderUnderSize(node, MAX_BYTES));
     } finally {
       node.style.transform = prevTransform;
       node.style.position = prevPosition;
@@ -239,7 +290,7 @@ $('downloadBtn').addEventListener('click', async () => {
 
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.download = 'template-cuu-shop.png';
+    link.download = `template-cuu-shop.${ext}`;
     link.href = url;
     document.body.appendChild(link);
     link.click();
