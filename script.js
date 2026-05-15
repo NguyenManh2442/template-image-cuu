@@ -15,7 +15,7 @@ function bindImageInput(inputId, targetId) {
   });
 }
 
-bindImageInput('logoInput', 'logoImg');
+// bindImageInput('logoInput', 'logoImg');
 bindImageInput('mainImageInput', 'mainImg');
 bindImageInput('cutoutImageInput', 'cutoutImg');
 
@@ -52,6 +52,19 @@ function bindVoucherValue(inputId, targetId) {
 bindVoucherValue('voucher1Value', 'v1Value');
 bindVoucherValue('voucher2Value', 'v2Value');
 
+// ===== Toggle ẩn/hiện voucher & badge =====
+function bindToggle(inputId, className) {
+  const input = $(inputId);
+  const template = $('template');
+  const apply = () => template.classList.toggle(className, !input.checked);
+  input.addEventListener('change', apply);
+  apply();
+}
+
+bindToggle('showVoucher1', 'hide-v1');
+bindToggle('showVoucher2', 'hide-v2');
+bindToggle('showBadge', 'hide-badge');
+
 // ===== Color controls =====
 function bindColor(inputId, cssVar) {
   $(inputId).addEventListener('input', (e) => {
@@ -62,18 +75,22 @@ function bindColor(inputId, cssVar) {
 bindColor('colorBg', '--color-bg');
 bindColor('colorAccent', '--color-accent');
 bindColor('colorText', '--color-text');
+bindColor('colorCutout', '--color-cutout');
 
 // ===== Presets =====
 document.querySelectorAll('.preset').forEach((btn) => {
   btn.addEventListener('click', () => {
-    const { bg, bg2, accent, text } = btn.dataset;
+    const { bg, bg2, accent, text, cutout } = btn.dataset;
     root.style.setProperty('--color-bg', bg);
     if (bg2) root.style.setProperty('--color-bg2', bg2);
     root.style.setProperty('--color-accent', accent);
     root.style.setProperty('--color-text', text);
+    const cutoutColor = cutout || accent;
+    root.style.setProperty('--color-cutout', cutoutColor);
     $('colorBg').value = bg;
     $('colorAccent').value = accent;
     $('colorText').value = text;
+    $('colorCutout').value = cutoutColor;
   });
 });
 
@@ -199,12 +216,24 @@ $('downloadBtn').addEventListener('click', async () => {
 
     btn.textContent = 'Đang render...';
 
-    const blob = await window.modernScreenshot.domToBlob(node, {
-      scale: 2,
-      type: 'image/png',
-      quality: 1,
-      backgroundColor: null,
-    });
+    // Tạm bỏ transform responsive (mobile) để screenshot ra đúng 1000×1000
+    const prevTransform = node.style.transform;
+    const prevPosition = node.style.position;
+    node.style.transform = 'none';
+    node.style.position = 'static';
+
+    let blob;
+    try {
+      blob = await window.modernScreenshot.domToBlob(node, {
+        scale: 2,
+        type: 'image/png',
+        quality: 1,
+        backgroundColor: null,
+      });
+    } finally {
+      node.style.transform = prevTransform;
+      node.style.position = prevPosition;
+    }
 
     if (!blob) throw new Error('Không tạo được blob (canvas tainted - cần chạy qua HTTP server)');
 

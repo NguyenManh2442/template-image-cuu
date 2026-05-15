@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Template Quảng Cáo - G.A.O</title>
+<title>Template Image - Cừu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:ital,wght@0,400;0,600;0,700;0,800;1,500&family=Fredoka:wght@500;600;700&family=Pacifico&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="cuu-shop.png" />
 <link rel="stylesheet" href="style.css" />
 <script defer src="https://cdn.jsdelivr.net/npm/modern-screenshot@4.7.0/dist/index.js"></script>
 </head>
@@ -16,10 +17,10 @@
     <aside class="control-panel">
       <h2>Tùy chỉnh Template</h2>
 
-      <div class="control-group">
+      <!-- <div class="control-group">
         <label>Logo</label>
         <input type="file" id="logoInput" accept="image/*" />
-      </div>
+      </div> -->
 
       <div class="control-group">
         <label>Ảnh sản phẩm chính</label>
@@ -27,13 +28,34 @@
       </div>
 
       <div class="control-group">
-        <label>Ảnh cutout (bên trái)</label>
+        <label>
+          Ảnh cutout (bên trái)
+          <a class="note-link" href="https://www.remove.bg/vi" target="_blank" rel="noopener">
+            (tách nền tại remove.bg ↗)
+          </a>
+        </label>
         <input type="file" id="cutoutImageInput" accept="image/*" />
       </div>
 
       <div class="control-group">
         <label>Cân nặng / Số đo</label>
-        <input type="text" id="weightInput" value="6 - 25Kg" />
+        <input type="text" id="weightInput" value="6 tuổi - 25Kg" />
+      </div>
+
+      <h3>Hiển thị</h3>
+      <div class="control-group toggle-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="showVoucher1" checked />
+          <span>Voucher 1</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="showVoucher2" checked />
+          <span>Voucher 2</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="showBadge" checked />
+          <span>Badge "Ảnh thật"</span>
+        </label>
       </div>
 
       <div class="control-group">
@@ -82,16 +104,21 @@
         <input type="color" id="colorText" value="#e91e63" />
       </div>
 
+      <div class="control-group">
+        <label>Màu viền ảnh cutout</label>
+        <input type="color" id="colorCutout" value="#ff8fb1" />
+      </div>
+
       <h3>Preset Tone Màu</h3>
       <div class="preset-row">
-        <button class="preset" data-bg="#ffd9e6" data-bg2="#ffeef5" data-accent="#ff8fb1" data-text="#e91e63" data-sun="#fcd34d" style="background:linear-gradient(135deg,#ffd9e6,#ff8fb1)"></button>
-        <button class="preset" data-bg="#d9ecff" data-bg2="#eaf5ff" data-accent="#7eb8ff" data-text="#1e3a8a" data-sun="#fbbf24" style="background:linear-gradient(135deg,#d9ecff,#7eb8ff)"></button>
-        <button class="preset" data-bg="#d4f5e0" data-bg2="#eafff1" data-accent="#7cd9a0" data-text="#166534" data-sun="#fbbf24" style="background:linear-gradient(135deg,#d4f5e0,#7cd9a0)"></button>
-        <button class="preset" data-bg="#fff2cc" data-bg2="#fff8e0" data-accent="#ffd966" data-text="#b45309" data-sun="#f97316" style="background:linear-gradient(135deg,#fff2cc,#ffd966)"></button>
-        <button class="preset" data-bg="#ebe0ff" data-bg2="#f4ecff" data-accent="#b594ff" data-text="#5b21b6" data-sun="#fbbf24" style="background:linear-gradient(135deg,#ebe0ff,#b594ff)"></button>
-        <button class="preset" data-bg="#ffe0e0" data-bg2="#ffeded" data-accent="#ff8585" data-text="#991b1b" data-sun="#fbbf24" style="background:linear-gradient(135deg,#ffe0e0,#ff8585)"></button>
-        <button class="preset" data-bg="#e0fbff" data-bg2="#effdff" data-accent="#7dd8ec" data-text="#0e7490" data-sun="#fbbf24" style="background:linear-gradient(135deg,#e0fbff,#7dd8ec)"></button>
-        <button class="preset" data-bg="#ffe5d4" data-bg2="#fff0e5" data-accent="#ffae7a" data-text="#c2410c" data-sun="#fbbf24" style="background:linear-gradient(135deg,#ffe5d4,#ffae7a)"></button>
+        <button class="preset" data-bg="#ffd9e6" data-bg2="#ffeef5" data-accent="#ff8fb1" data-text="#e91e63" data-cutout="#ff8fb1" data-sun="#fcd34d" style="background:linear-gradient(135deg,#ffd9e6,#ff8fb1)"></button>
+        <button class="preset" data-bg="#d9ecff" data-bg2="#eaf5ff" data-accent="#7eb8ff" data-text="#1e3a8a" data-cutout="#7eb8ff" data-sun="#fbbf24" style="background:linear-gradient(135deg,#d9ecff,#7eb8ff)"></button>
+        <button class="preset" data-bg="#d4f5e0" data-bg2="#eafff1" data-accent="#7cd9a0" data-text="#166534" data-cutout="#7cd9a0" data-sun="#fbbf24" style="background:linear-gradient(135deg,#d4f5e0,#7cd9a0)"></button>
+        <button class="preset" data-bg="#fff2cc" data-bg2="#fff8e0" data-accent="#ffd966" data-text="#b45309" data-cutout="#ffd966" data-sun="#f97316" style="background:linear-gradient(135deg,#fff2cc,#ffd966)"></button>
+        <button class="preset" data-bg="#ebe0ff" data-bg2="#f4ecff" data-accent="#b594ff" data-text="#5b21b6" data-cutout="#b594ff" data-sun="#fbbf24" style="background:linear-gradient(135deg,#ebe0ff,#b594ff)"></button>
+        <button class="preset" data-bg="#ffe0e0" data-bg2="#ffeded" data-accent="#ff8585" data-text="#991b1b" data-cutout="#ff8585" data-sun="#fbbf24" style="background:linear-gradient(135deg,#ffe0e0,#ff8585)"></button>
+        <button class="preset" data-bg="#e0fbff" data-bg2="#effdff" data-accent="#7dd8ec" data-text="#0e7490" data-cutout="#7dd8ec" data-sun="#fbbf24" style="background:linear-gradient(135deg,#e0fbff,#7dd8ec)"></button>
+        <button class="preset" data-bg="#ffe5d4" data-bg2="#fff0e5" data-accent="#ffae7a" data-text="#c2410c" data-cutout="#ffae7a" data-sun="#fbbf24" style="background:linear-gradient(135deg,#ffe5d4,#ffae7a)"></button>
       </div>
 
       <button id="downloadBtn" class="btn-download">📥 Tải ảnh template (.png)</button>
@@ -99,6 +126,7 @@
 
     <!-- Template -->
     <main class="template-wrap">
+      <div class="template-stage">
       <div class="template" id="template">
 
         <!-- SVG filter defs for crisp body outline -->
@@ -106,7 +134,7 @@
           <defs>
             <filter id="bodyOutline" x="-10%" y="-10%" width="120%" height="120%">
               <feMorphology in="SourceAlpha" operator="dilate" radius="4" result="dilated"/>
-              <feFlood style="flood-color: var(--color-text)" result="flood"/>
+              <feFlood style="flood-color: var(--color-cutout)" result="flood"/>
               <feComposite in="flood" in2="dilated" operator="in" result="outline"/>
               <feGaussianBlur in="dilated" stdDeviation="0.6" result="blurredDilated"/>
               <feFlood flood-color="rgba(0,0,0,0.25)" result="shadowFlood"/>
@@ -152,7 +180,7 @@
 
           <!-- Vouchers -->
           <div class="vouchers">
-            <div class="voucher">
+            <div class="voucher" id="voucher1">
               <span class="notch left"></span>
               <span class="notch right"></span>
               <span class="tear-line"></span>
@@ -160,7 +188,7 @@
               <div class="voucher-value" id="v1Value">30<small>K</small></div>
               <svg class="mini-sparkle ms1" viewBox="0 0 24 24"><path d="M12 2 L13.5 10.5 L22 12 L13.5 13.5 L12 22 L10.5 13.5 L2 12 L10.5 10.5 Z" fill="currentColor"/></svg>
             </div>
-            <div class="voucher">
+            <div class="voucher" id="voucher2">
               <span class="notch left"></span>
               <span class="notch right"></span>
               <span class="tear-line"></span>
@@ -195,28 +223,21 @@
           <!-- Cutout -->
           <div class="cutout-col">
             <div class="weight-tag">
-              <span class="bag-icon">
-                <svg viewBox="0 0 32 32">
-                  <path d="M7 12 h18 l-2 17 h-14 z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
-                  <path d="M11 12 v-3 a5 5 0 0 1 10 0 v3" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                  <circle cx="13" cy="17" r="1.2" fill="currentColor"/>
-                  <circle cx="19" cy="17" r="1.2" fill="currentColor"/>
-                </svg>
-              </span>
-              <span class="weight-text" id="weightText">6 - 25Kg</span>
+              <span class="weight-text" id="weightText">6 tuổi - 25Kg</span>
               <svg class="tag-heart" viewBox="0 0 32 32"><path d="M16 28 L4 14 a7 7 0 0 1 12-5 a7 7 0 0 1 12 5 z" fill="currentColor"/></svg>
             </div>
             <div class="cutout-image">
-              <img id="cutoutImg" src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=600" alt="cutout" />
+              <img id="cutoutImg" src="image2.png" alt="cutout" />
             </div>
           </div>
 
           <!-- Main photo -->
           <div class="main-photo">
-            <img id="mainImg" src="https://images.unsplash.com/photo-1519689680058-324335c77eba?w=900" alt="main" />
+            <img id="mainImg" src="image1.jpg" alt="main" />
             <svg class="photo-corner tl" viewBox="0 0 60 60"><path d="M5 30 a25 25 0 0 1 25 -25" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/></svg>
           </div>
         </div>
+      </div>
       </div>
     </main>
   </div>
