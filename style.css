@@ -438,6 +438,7 @@ body {
   z-index: 4;
   box-shadow: 0 6px 14px rgba(233, 30, 99, 0.15);
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .bag-icon {
@@ -450,6 +451,14 @@ body {
 .weight-text {
   line-height: 1;
   text-shadow: 1px 1px 0 #fff;
+  white-space: nowrap;
+}
+
+.voucher-title,
+.voucher-value,
+.badge-l1,
+.badge-l2 {
+  white-space: nowrap;
 }
 
 .tag-heart {
